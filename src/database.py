@@ -25,12 +25,20 @@ def init_db():
                 conn.autocommit = True
                 cur = conn.cursor()
                 cur.execute("""
+                    CREATE SEQUENCE IF NOT EXISTS user_id_seq START 1;
+                    CREATE TABLE IF NOT EXISTS users (
+                        id INTEGER PRIMARY KEY DEFAULT nextval('user_id_seq'),
+                        username VARCHAR(50) UNIQUE NOT NULL,
+                        hashed_password VARCHAR(255) NOT NULL
+                    );
                     CREATE SEQUENCE IF NOT EXISTS task_id_seq START 1;
                     CREATE TABLE IF NOT EXISTS tasks (
                         id INTEGER PRIMARY KEY DEFAULT nextval('task_id_seq'),
                         title VARCHAR(255) NOT NULL,
                         description TEXT,
-                        completed BOOLEAN DEFAULT FALSE
+                        completed BOOLEAN DEFAULT FALSE,
+                        user_id INTEGER,
+                        FOREIGN KEY (user_id) REFERENCES users(id)
                     )
                 """)
                 logger.info("Database initialized successfully")

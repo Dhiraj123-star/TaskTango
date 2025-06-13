@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str
     APP_ENV: str = "development"
     LOG_LEVEL: str = "INFO"
+    SECRET_KEY: str
 
     class Config:
         env_file = ".env"
